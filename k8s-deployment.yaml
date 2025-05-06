@@ -3,7 +3,7 @@ kind: Deployment
 metadata:
   name: swagger-minimal-api
 spec:
-  replicas: 3
+  replicas: 1  # Starting with 1 replica for initial deployment
   selector:
     matchLabels:
       app: swagger-minimal-api
@@ -20,10 +20,11 @@ spec:
             cpu: "100m"
             memory: "256Mi"
           limits:
-            cpu: "200m"
-            memory: "512Mi"
+            cpu: "500m"     # Increased CPU limit
+            memory: "1Gi"   # Increased memory limit
         ports:
         - containerPort: 8080
+        - containerPort: 8081  # Added second port from Dockerfile
 ---
 apiVersion: autoscaling/v2
 kind: HorizontalPodAutoscaler
@@ -34,7 +35,7 @@ spec:
     apiVersion: apps/v1
     kind: Deployment
     name: swagger-minimal-api
-  minReplicas: 3
+  minReplicas: 1    # Reduced minimum replicas
   maxReplicas: 10
   metrics:
   - type: Resource
@@ -51,7 +52,11 @@ metadata:
 spec:
   type: LoadBalancer
   ports:
-  - port: 80
+  - name: http
+    port: 80
     targetPort: 8080
+  - name: https    # Added second port mapping
+    port: 443
+    targetPort: 8081
   selector:
     app: swagger-minimal-api
