@@ -1,0 +1,57 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: swagger-minimal-api
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: swagger-minimal-api
+  template:
+    metadata:
+      labels:
+        app: swagger-minimal-api
+    spec:
+      containers:
+      - name: swagger-minimal-api
+        image: acrdemopn.azurecr.io/swagger-minimal-api:latest
+        resources:
+          requests:
+            cpu: "100m"
+            memory: "256Mi"
+          limits:
+            cpu: "200m"
+            memory: "512Mi"
+        ports:
+        - containerPort: 8080
+---
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: swagger-minimal-api-hpa
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: swagger-minimal-api
+  minReplicas: 3
+  maxReplicas: 10
+  metrics:
+  - type: Resource
+    resource:
+      name: cpu
+      target:
+        type: Utilization
+        averageUtilization: 70
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: swagger-minimal-api
+spec:
+  type: LoadBalancer
+  ports:
+  - port: 80
+    targetPort: 8080
+  selector:
+    app: swagger-minimal-api

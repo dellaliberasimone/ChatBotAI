@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.13.35931.197 d17.13
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "swagger-minimal-api", "swagger-minimal-api.csproj", "{0C63A9B5-9226-8EE4-D043-2F11099FB85E}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{0C63A9B5-9226-8EE4-D043-2F11099FB85E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0C63A9B5-9226-8EE4-D043-2F11099FB85E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0C63A9B5-9226-8EE4-D043-2F11099FB85E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0C63A9B5-9226-8EE4-D043-2F11099FB85E}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {C0BAB1B6-BF0D-4024-81B7-CBE55CCB98D4}
+	EndGlobalSection
+EndGlobal
