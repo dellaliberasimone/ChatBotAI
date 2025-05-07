@@ -3,7 +3,7 @@ kind: Deployment
 metadata:
   name: swagger-minimal-api
 spec:
-  replicas: 1  # Starting with 1 replica for initial deployment
+  replicas: 1
   selector:
     matchLabels:
       app: swagger-minimal-api
@@ -15,16 +15,23 @@ spec:
       containers:
       - name: swagger-minimal-api
         image: acrdemopn.azurecr.io/swagger-minimal-api:latest
+        imagePullPolicy: Always
+        env:
+        - name: DOTNET_RUNNING_IN_CONTAINER
+          value: "true"
+        - name: ASPNETCORE_URLS
+          value: "http://+:8080"
+        - name: ASPNETCORE_ENVIRONMENT
+          value: "Production"
         resources:
           requests:
-            cpu: "50m"      # Reduced CPU request
+            cpu: "50m"
             memory: "256Mi"
           limits:
-            cpu: "200m"     # Reduced CPU limit
+            cpu: "200m"
             memory: "1Gi"
         ports:
         - containerPort: 8080
-        - containerPort: 8081  # Added second port from Dockerfile
 ---
 apiVersion: autoscaling/v2
 kind: HorizontalPodAutoscaler
@@ -35,7 +42,7 @@ spec:
     apiVersion: apps/v1
     kind: Deployment
     name: swagger-minimal-api
-  minReplicas: 1    # Reduced minimum replicas
+  minReplicas: 1
   maxReplicas: 10
   metrics:
   - type: Resource
@@ -55,8 +62,5 @@ spec:
   - name: http
     port: 80
     targetPort: 8080
-  - name: https    # Added second port mapping
-    port: 443
-    targetPort: 8081
   selector:
     app: swagger-minimal-api
