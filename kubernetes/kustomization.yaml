@@ -5,7 +5,3 @@ images:
 - name: acrdemopn.azurecr.io/swagger-minimal-api
   newName: acrdemopn.azurecr.io/swagger-minimal-api
   newTag: latest
-
-replicas:
-- name: swagger-minimal-api
-  count: 2

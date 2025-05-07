@@ -11,7 +11,7 @@ env:
   CONTAINER_NAME: swagger-minimal-api
   RESOURCE_GROUP: scaling-aks-demo-rg
   CLUSTER_NAME: aks-minimal-api
-  DEPLOYMENT_MANIFEST_PATH: k8s-deployment.yaml
+  DEPLOYMENT_MANIFEST_PATH: kubernetes/k8s-deployment.yaml
 
 jobs:
   build-and-deploy:
@@ -41,20 +41,21 @@ jobs:
       uses: docker/build-push-action@v5
       with:
         context: .
+        file: ./infrastructure/Dockerfile
         push: true
         tags: ${{ env.AZURE_CONTAINER_REGISTRY }}/${{ env.CONTAINER_NAME }}:${{ github.sha }}
         
-    # - name: Set up kubeconfig
-    #   uses: azure/aks-set-context@v3
-    #   with:
-    #     resource-group: ${{ env.RESOURCE_GROUP }}
-    #     cluster-name: ${{ env.CLUSTER_NAME }}
+    - name: Set up kubeconfig
+      uses: azure/aks-set-context@v3
+      with:
+        resource-group: ${{ env.RESOURCE_GROUP }}
+        cluster-name: ${{ env.CLUSTER_NAME }}
+
+    - name: Update kustomization image
+      run: |
+        cd kubernetes
+        sed -i "s|newTag:.*|newTag: ${{ github.sha }}|" kustomization.yaml
         
-    # - name: Deploy to AKS
-    #   uses: azure/k8s-deploy@v4
-    #   with:
-    #     manifests: |
-    #       ${{ env.DEPLOYMENT_MANIFEST_PATH }}
-    #     images: |
-    #       ${{ env.AZURE_CONTAINER_REGISTRY }}/${{ env.CONTAINER_NAME }}:${{ github.sha }}
-    #     namespace: default
+    - name: Deploy to AKS
+      run: |
+        kubectl apply -k kubernetes/
