@@ -17,11 +17,11 @@ spec:
         image: acrdemopn.azurecr.io/swagger-minimal-api:latest
         resources:
           requests:
-            cpu: "100m"
+            cpu: "50m"      # Reduced CPU request
             memory: "256Mi"
           limits:
-            cpu: "500m"     # Increased CPU limit
-            memory: "1Gi"   # Increased memory limit
+            cpu: "200m"     # Reduced CPU limit
+            memory: "1Gi"
         ports:
         - containerPort: 8080
         - containerPort: 8081  # Added second port from Dockerfile
