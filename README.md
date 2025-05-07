@@ -51,4 +51,4 @@ The application uses a flexible authentication approach:
 - GET `/`: Health check endpoint
 - POST `/openai`: Chat completion endpoint
   - Requires a JSON body with a `prompt` field
-  - Returns the AI assistant's response.
+  - Returns the AI assistant's response
