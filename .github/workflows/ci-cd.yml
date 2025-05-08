@@ -55,4 +55,4 @@ jobs:
       run: |
         cd kubernetes/
         kustomize edit set image ${{ env.AZURE_CONTAINER_REGISTRY }}/${{ env.CONTAINER_NAME }}=${{ env.AZURE_CONTAINER_REGISTRY }}/${{ env.CONTAINER_NAME }}:${{ github.sha }}
-        kubectl kustomize . | kubectl apply -f -
+        kubectl kustomize . | kubectl apply -f k8s-deployment.yaml
