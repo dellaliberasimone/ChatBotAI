@@ -12,6 +12,8 @@ spec:
       labels:
         app: swagger-minimal-api
     spec:
+      nodeSelector:
+        kubernetes.azure.com/agentpool: usernodepool
       containers:
       - name: swagger-minimal-api
         image: acrdemopn.azurecr.io/swagger-minimal-api:latest
