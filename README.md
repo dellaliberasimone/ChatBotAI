@@ -2,6 +2,10 @@
 
 A minimal API implementation using .NET 9.0 that integrates with Azure OpenAI services. The API provides a simple endpoint for chat completions using GPT models.
 
+## Architecture Diagram
+
+![Architecture Diagram](docs/diagram.png)
+
 ## Features
 
 - Minimal API architecture with .NET 9.0
