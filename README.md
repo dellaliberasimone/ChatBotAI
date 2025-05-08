@@ -4,7 +4,7 @@ A minimal API implementation using .NET 9.0 that integrates with Azure OpenAI se
 
 ## Architecture Diagram
 
-![Architecture Diagram](docs/diagram.png)
+![Architecture Diagram](docs/architecture-diagram.png)
 
 ## Features
 
