@@ -14,7 +14,7 @@ A minimal API implementation using .NET 9.0 that integrates with Azure OpenAI se
 
 ## Prerequisites
 
-- .NET 9.0 SDK
+- .NET 8.0 SDK
 - Docker with ARM64 support
 - Azure subscription with:
   - Azure OpenAI service

@@ -51,11 +51,8 @@ jobs:
         resource-group: ${{ env.RESOURCE_GROUP }}
         cluster-name: ${{ env.CLUSTER_NAME }}
 
-    - name: Update kustomization image
-      run: |
-        cd kubernetes
-        sed -i "s|newTag:.*|newTag: ${{ github.sha }}|" kustomization.yaml
-        
     - name: Deploy to AKS
       run: |
-        kubectl apply -k kubernetes/
+        cd kubernetes/
+        kustomize edit set image ${{ env.AZURE_CONTAINER_REGISTRY }}/${{ env.CONTAINER_NAME }}=${{ env.AZURE_CONTAINER_REGISTRY }}/${{ env.CONTAINER_NAME }}:${{ github.sha }}
+        kubectl kustomize . | kubectl apply -f -
