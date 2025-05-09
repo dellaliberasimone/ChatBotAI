@@ -44,7 +44,7 @@ spec:
     apiVersion: apps/v1
     kind: Deployment
     name: swagger-minimal-api
-  minReplicas: 1
+  minReplicas: 3
   maxReplicas: 10
   metrics:
   - type: Resource
