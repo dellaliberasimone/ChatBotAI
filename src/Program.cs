@@ -8,10 +8,6 @@ using Azure.Security.KeyVault.Secrets;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
-
 // Configure Azure Services
 builder.Services.AddSingleton<AzureOpenAIClient>(sp =>
 {
@@ -47,28 +43,46 @@ builder.Services.AddSingleton<AzureOpenAIClient>(sp =>
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
-{
-    app.UseSwagger();
-    app.UseSwaggerUI();
-}
+app.UseStaticFiles(); // Serve static files
 
 app.MapGet("/", () => "Hello World!");
 
-app.MapPost("/openai", async ([FromBody] OpenAIRequest request, AzureOpenAIClient azureClient) =>
+app.MapPost("/api/chat", async (ChatRequest request, AzureOpenAIClient azureClient) =>
 {
-    ChatClient chatClient = azureClient.GetChatClient("gpt-4o-mini");
-    ChatCompletion completion = await chatClient.CompleteChatAsync(
-    [
-        new SystemChatMessage("Sei un assistente virtuale che risponde a delle domande"),
-        new UserChatMessage(request.Prompt),
-    ]);
-    return $"{completion.Role}: {completion.Content[0].Text}";
+    try 
+    {
+        ChatClient chatClient = azureClient.GetChatClient("gpt-4o-mini");
+        ChatCompletion completion = await chatClient.CompleteChatAsync(
+        [
+            new SystemChatMessage("Sei un assistente virtuale che risponde a delle domande"),
+            new UserChatMessage(request.Message),
+        ]);
+        
+        return Results.Ok(new ChatResponse
+        {
+            Text = completion.Content[0].Text,
+            Type = "bot"
+        });
+    }
+    catch (Exception ex)
+    {
+        return Results.BadRequest(new ChatResponse
+        {
+            Text = "Sorry, I encountered an error processing your request.",
+            Type = "bot"
+        });
+    }
 });
 
 app.Run();
 
-public class OpenAIRequest{
-    public required string Prompt {get; set;}
+public class ChatRequest
+{
+    public string Message {get; set;} = string.Empty;
+}
+
+public class ChatResponse
+{
+    public string Text {get; set;} = string.Empty;
+    public string Type {get; set;} = string.Empty;
 }
