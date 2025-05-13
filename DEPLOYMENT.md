@@ -32,7 +32,7 @@ az login
 az acr login --name acrdemopn
 
 # Build and tag backend image
-docker build -t acrdemopn.azurecr.io/chatbot-backend:latest -f ./infrastructure/Dockerfile .
+docker build -t acrdemopn.azurecr.io/chatbot-backend:latest -f ./backend/Dockerfile ./backend
 
 # Build and tag frontend image
 docker build -t acrdemopn.azurecr.io/chatbot-frontend:latest -f ./frontend/Dockerfile ./frontend
