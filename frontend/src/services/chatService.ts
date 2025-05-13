@@ -1,7 +1,8 @@
 import axios from 'axios';
 import { ChatRequest, ChatResponse } from '../types/chat';
 
-const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000';
+// First check for runtime config from window.ENV, then build-time env vars, then fallback
+const API_URL = (window as any).ENV?.API_URL || process.env.REACT_APP_API_URL || 'http://localhost:5000';
 
 export const chatService = {
   async sendMessage(message: string): Promise<ChatResponse> {

@@ -13,7 +13,14 @@ builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowFrontend", policy =>
     {
-        policy.WithOrigins("http://localhost:3000")
+        // Get allowed origins from config or environment variable, or use defaults
+        var config = builder.Configuration.GetSection("Cors:AllowedOrigins").Get<string[]>();
+        var envOrigins = Environment.GetEnvironmentVariable("ALLOWED_ORIGINS")?.Split(',');
+        
+        var allowedOrigins = envOrigins ?? config ?? 
+                            new[] { "http://localhost:3000", "http://chatbot-frontend" };
+                            
+        policy.WithOrigins(allowedOrigins)
               .AllowAnyHeader()
               .AllowAnyMethod();
     });
@@ -46,9 +53,11 @@ var app = builder.Build();
 
 app.UseStaticFiles(); 
 
+// Enable CORS
 app.UseCors("AllowFrontend");
 
-app.MapGet("/", () => "Hello World!");
+// Basic health check endpoint
+app.MapGet("/", () => "Hello World! Backend API is running.");
 
 app.MapPost("/api/chat", async (ChatRequest request, AzureOpenAIClient azureClient) =>
 {

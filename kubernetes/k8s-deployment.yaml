@@ -26,6 +26,8 @@ spec:
           value: "http://+:8080"
         - name: ASPNETCORE_ENVIRONMENT
           value: "Production"
+        - name: ALLOWED_ORIGINS
+          value: "http://chatbot-frontend,http://chatbot-frontend.default.svc.cluster.local,https://*.azurewebsites.net"
         resources:
           requests:
             cpu: "50m"
