@@ -1,4 +1,3 @@
-# filepath: k8s-deployment.yaml
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -11,8 +10,7 @@ spec:
   template:
     metadata:
       labels:
-        app: chatbot-backend
-    spec:
+        app: chatbot-backend    spec:
       nodeSelector:
         kubernetes.azure.com/agentpool: usernodepool
       containers:
@@ -39,12 +37,12 @@ spec:
 apiVersion: autoscaling/v2
 kind: HorizontalPodAutoscaler
 metadata:
-  name: chatbot-backend-hpa
+  name: swagger-minimal-api-hpa
 spec:
   scaleTargetRef:
     apiVersion: apps/v1
     kind: Deployment
-    name: chatbot-backend
+    name: swagger-minimal-api
   minReplicas: 3
   maxReplicas: 10
   metrics:
@@ -58,7 +56,7 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: chatbot-backend
+  name: swagger-minimal-api
 spec:
   type: LoadBalancer
   ports:
@@ -66,4 +64,4 @@ spec:
     port: 80
     targetPort: 8080
   selector:
-    app: chatbot-backend
+    app: swagger-minimal-api

@@ -8,7 +8,7 @@ on:
 
 env:
   AZURE_CONTAINER_REGISTRY: acrdemopn.azurecr.io
-  CONTAINER_NAME: swagger-minimal-api
+  CONTAINER_NAME: chatbot-backend
   RESOURCE_GROUP: scaling-aks-demo-rg
   CLUSTER_NAME: aks-minimal-api
   DEPLOYMENT_MANIFEST_PATH: kubernetes/k8s-deployment.yaml

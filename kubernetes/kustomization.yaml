@@ -2,6 +2,6 @@ resources:
 - k8s-deployment.yaml
 
 images:
-- name: acrdemopn.azurecr.io/swagger-minimal-api
-  newName: acrdemopn.azurecr.io/swagger-minimal-api
+- name: acrdemopn.azurecr.io/chatbot-backend
+  newName: acrdemopn.azurecr.io/chatbot-backend
   newTag: latest
