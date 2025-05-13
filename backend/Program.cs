@@ -8,6 +8,24 @@ using Azure.Security.KeyVault.Secrets;
 
 var builder = WebApplication.CreateBuilder(args);
 
+// Add CORS support for frontend
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowFrontend", policy =>
+    {
+        // Get allowed origins from config or environment variable, or use defaults
+        var config = builder.Configuration.GetSection("Cors:AllowedOrigins").Get<string[]>();
+        var envOrigins = Environment.GetEnvironmentVariable("ALLOWED_ORIGINS")?.Split(',');
+        
+        var allowedOrigins = envOrigins ?? config ?? 
+                            new[] { "http://localhost:3000", "http://chatbot-frontend" };
+                            
+        policy.WithOrigins(allowedOrigins)
+              .AllowAnyHeader()
+              .AllowAnyMethod();
+    });
+});
+
 // Configure Azure Services
 builder.Services.AddSingleton<AzureOpenAIClient>(sp =>
 {
@@ -35,7 +53,11 @@ var app = builder.Build();
 
 app.UseStaticFiles(); 
 
-app.MapGet("/", () => "Hello World!");
+// Enable CORS
+app.UseCors("AllowFrontend");
+
+// Basic health check endpoint
+app.MapGet("/", () => "Hello World! Backend API is running.");
 
 app.MapPost("/api/chat", async (ChatRequest request, AzureOpenAIClient azureClient) =>
 {

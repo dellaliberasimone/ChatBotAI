@@ -1,7 +1,11 @@
 resources:
 - k8s-deployment.yaml
+- frontend-deployment.yaml
 
 images:
 - name: acrdemopn.azurecr.io/chatbot-backend
   newName: acrdemopn.azurecr.io/chatbot-backend
+  newTag: latest
+- name: acrdemopn.azurecr.io/chatbot-frontend
+  newName: acrdemopn.azurecr.io/chatbot-frontend
   newTag: latest

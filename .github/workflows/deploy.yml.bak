@@ -19,8 +19,7 @@ jobs:
     
     steps:
     - uses: actions/checkout@v3
-    
-    - name: Set up .NET
+      - name: Set up .NET
       uses: actions/setup-dotnet@v3
       with:
         dotnet-version: '8.0.x'
@@ -42,40 +41,21 @@ jobs:
         username: ${{ secrets.ACR_USERNAME }}
         password: ${{ secrets.ACR_PASSWORD }}
         
-    - name: Build and push backend image
+    - name: Build and push
       uses: docker/build-push-action@v5
       with:
-        context: ./backend
-        file: ./backend/Dockerfile
+        context: .
+        file: ./infrastructure/Dockerfile
         push: true
-        tags: ${{ env.AZURE_CONTAINER_REGISTRY }}/${{ env.BACKEND_CONTAINER_NAME }}:${{ github.sha }}
-        
-    - name: Build and push frontend image
-      uses: docker/build-push-action@v5
-      with:
-        context: ./frontend
-        file: ./frontend/Dockerfile
-        push: true
-        tags: ${{ env.AZURE_CONTAINER_REGISTRY }}/${{ env.FRONTEND_CONTAINER_NAME }}:${{ github.sha }}
+        tags: ${{ env.AZURE_CONTAINER_REGISTRY }}/${{ env.CONTAINER_NAME }}:${{ github.sha }}
         
     - name: Set up kubeconfig
       uses: azure/aks-set-context@v3
       with:
         resource-group: ${{ env.RESOURCE_GROUP }}
         cluster-name: ${{ env.CLUSTER_NAME }}
-        
-    # Update deployment yaml with current image tags
-    - name: Update kustomization.yaml
-      run: |
-        cd kubernetes/
-        sed -i "s|newTag: latest|newTag: ${{ github.sha }}|g" kustomization.yaml
 
     - name: Deploy to AKS
       run: |
         cd kubernetes/
-        kubectl apply -k .
-        
-    - name: Verify deployment
-      run: |
-        kubectl rollout status deployment/chatbot-backend
-        kubectl rollout status deployment/chatbot-frontend
+        kubectl kustomize . | kubectl apply -f k8s-deployment.yaml
