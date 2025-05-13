@@ -8,6 +8,17 @@ using Azure.Security.KeyVault.Secrets;
 
 var builder = WebApplication.CreateBuilder(args);
 
+// Add CORS support for frontend
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowFrontend", policy =>
+    {
+        policy.WithOrigins("http://localhost:3000")
+              .AllowAnyHeader()
+              .AllowAnyMethod();
+    });
+});
+
 // Configure Azure Services
 builder.Services.AddSingleton<AzureOpenAIClient>(sp =>
 {
@@ -34,6 +45,8 @@ builder.Services.AddSingleton<AzureOpenAIClient>(sp =>
 var app = builder.Build();
 
 app.UseStaticFiles(); 
+
+app.UseCors("AllowFrontend");
 
 app.MapGet("/", () => "Hello World!");
 
