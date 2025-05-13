@@ -2,7 +2,7 @@
 # Visual Studio Version 17
 VisualStudioVersion = 17.13.35931.197
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4-00C04F79EFBC}") = "swagger-minimal-api", "src\swagger-minimal-api.csproj", "{0C63A9B5-9226-8EE4-D043-2F11099FB85E}"
+Project("{FAE04EC0-301F-11D3-BF4-00C04F79EFBC}") = "chatbot-backend", "chatbot-backend.csproj", "{0C63A9B5-9226-8EE4-D043-2F11099FB85E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
