@@ -54,7 +54,7 @@ app.MapPost("/api/chat", async (ChatRequest request, AzureOpenAIClient azureClie
         ChatClient chatClient = azureClient.GetChatClient("gpt-4o-mini");
         ChatCompletion completion = await chatClient.CompleteChatAsync(
         [
-            new SystemChatMessage("Sei un assistente virtuale che risponde a delle domande"),
+            new SystemChatMessage("Sei un assistente virtuale che risponde a delle domande di vita quotidiana"),
             new UserChatMessage(request.Message),
         ]);
         
