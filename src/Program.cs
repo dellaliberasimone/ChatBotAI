@@ -12,38 +12,28 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddSingleton<AzureOpenAIClient>(sp =>
 {
     var configuration = sp.GetRequiredService<IConfiguration>();
-    var openAIEndpoint = configuration["AzureOpenAI:Endpoint"] ?? "https://sdellaliberaopenai.openai.azure.com/";
+    var openAIEndpoint = configuration["AzureOpenAI:Endpoint"];
     var keyVaultUri = configuration["KeyVault:Uri"];
     
     if (!string.IsNullOrEmpty(keyVaultUri))
     {
-        // In production, use managed identity to access Key Vault
-        var credential = new DefaultAzureCredential(new DefaultAzureCredentialOptions
-        {
-            AdditionallyAllowedTenants = { "72f988bf-86f1-41af-91ab-2d7cd011db47" }
-        });
-        
+        //get Azure credentials
+        var credential = new DefaultAzureCredential();
+        //log extract secret from keyVault if necessary
         var keyVaultClient = new SecretClient(new Uri(keyVaultUri), credential);
         var apiKey = keyVaultClient.GetSecret("AzureOpenAIKey").Value.Value;
         return new AzureOpenAIClient(new Uri(openAIEndpoint), new AzureKeyCredential(apiKey));
     }
     else
-    {
-        // Fallback for local development
-        var apiKey = configuration["AzureOpenAI:ApiKey"];
-        if (!string.IsNullOrEmpty(apiKey))
-        {
-            return new AzureOpenAIClient(new Uri(openAIEndpoint), new AzureKeyCredential(apiKey));
-        }
-        
-        // Last resort - try managed identity directly
+    {        
+        // use managed identity
         return new AzureOpenAIClient(new Uri(openAIEndpoint), new DefaultAzureCredential());
     }
 });
 
 var app = builder.Build();
 
-app.UseStaticFiles(); // Serve static files
+app.UseStaticFiles(); 
 
 app.MapGet("/", () => "Hello World!");
 
