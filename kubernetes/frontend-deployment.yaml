@@ -1,3 +1,4 @@
+# filepath: c:\Users\sdellalibera\source\repos\chatbot\kubernetes\frontend-deployment.yaml
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -14,24 +15,22 @@ spec:
       labels:
         app: chatbot-frontend
     spec:
-      nodeSelector:
-        kubernetes.azure.com/agentpool: usernodepool
       containers:
       - name: chatbot-frontend
         image: acrdemopn.azurecr.io/chatbot-frontend:latest
         imagePullPolicy: Always
         env:
         - name: API_URL
-          value: "http://chatbot-backend" # Reference the backend service by its k8s service name
+          value: 'http://chatbot-backend' # Reference the backend service by its k8s service name
         ports:
         - containerPort: 3000
         resources:
           requests:
-            cpu: "50m"
-            memory: "128Mi"
+            cpu: '100m'
+            memory: '256Mi'
           limits:
-            cpu: "150m"
-            memory: "256Mi"
+            cpu: '500m'
+            memory: '512Mi'
 ---
 apiVersion: v1
 kind: Service
@@ -51,10 +50,10 @@ kind: Ingress
 metadata:
   name: chatbot-ingress
   annotations:
-    kubernetes.io/ingress.class: "nginx"
-    nginx.ingress.kubernetes.io/ssl-redirect: "false"
-    nginx.ingress.kubernetes.io/use-regex: "true"
-    nginx.ingress.kubernetes.io/rewrite-target: /$2
+    kubernetes.io/ingress.class: 'nginx'
+    nginx.ingress.kubernetes.io/ssl-redirect: 'false'
+    nginx.ingress.kubernetes.io/use-regex: 'true'
+    nginx.ingress.kubernetes.io/rewrite-target: '/'
 spec:
   rules:
   - http:
