@@ -1,5 +1,5 @@
 resources:
-- k8s-deployment.yaml
+- backend-deployment.yaml
 - frontend-deployment.yaml
 
 images:

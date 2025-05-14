@@ -123,7 +123,7 @@ The application includes a complete CI/CD pipeline using GitHub Actions that:
   - `Dockerfile`: Backend Docker configuration
   - `infra.bicep`: Azure infrastructure as code
 - `kubernetes/`: Kubernetes deployment files
-  - `k8s-deployment.yaml`: Kubernetes deployment configuration
+  - `backend-deployment.yaml`: Kubernetes backend deployment configuration
   - `kustomization.yaml`: Kustomize configuration
 
 ## Authentication Architecture

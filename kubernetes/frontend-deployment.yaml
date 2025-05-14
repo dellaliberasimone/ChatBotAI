@@ -5,7 +5,7 @@ metadata:
   labels:
     app: chatbot-frontend
 spec:
-  replicas: 2
+  replicas: 1
   selector:
     matchLabels:
       app: chatbot-frontend
