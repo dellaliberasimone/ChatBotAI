@@ -18,6 +18,26 @@ A modern chat application using React for the frontend and a .NET minimal API fo
 - Support for Azure Key Vault secrets management
 - Managed Identity authentication
 
+## Quick Start
+
+### Option 1: One-Click Azure Deployment
+
+1. Clone this repository:
+   ```bash
+   git clone https://github.com/yourusername/chatbot.git
+   cd chatbot
+   ```
+
+2. Deploy the Azure infrastructure:
+   ```powershell
+   cd infrastructure
+   ./deploy-infrastructure.ps1 -ResourceGroupName "rg-chatbot-dev" -Location "westeurope"
+   ```
+
+3. Follow the instructions provided after deployment to build, push and deploy your application.
+
+### Option 2: Local Development
+
 ## Prerequisites
 
 - .NET 8.0 SDK
