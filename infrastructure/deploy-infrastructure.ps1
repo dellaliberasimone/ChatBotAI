@@ -83,8 +83,8 @@ az aks get-credentials --resource-group $ResourceGroupName --name $aksClusterNam
 Write-Host "`nNext steps:" -ForegroundColor Yellow
 Write-Host "1. Build and push your Docker images to ACR:" -ForegroundColor White
 Write-Host "   az acr login --name $acrName" -ForegroundColor Cyan
-Write-Host "   docker build -t $acrLoginServer/chatbot-backend:latest -f ./backend/Dockerfile ./backend" -ForegroundColor Cyan
-Write-Host "   docker build -t $acrLoginServer/chatbot-frontend:latest -f ./frontend/Dockerfile ./frontend" -ForegroundColor Cyan
+Write-Host "   docker build --platform linux/amd64 -t $acrLoginServer/chatbot-backend:latest -f ./backend/Dockerfile ./backend" -ForegroundColor Cyan
+Write-Host "   docker build --platform linux/amd64 -t $acrLoginServer/chatbot-frontend:latest -f ./frontend/Dockerfile ./frontend" -ForegroundColor Cyan
 Write-Host "   docker push $acrLoginServer/chatbot-backend:latest" -ForegroundColor Cyan
 Write-Host "   docker push $acrLoginServer/chatbot-frontend:latest" -ForegroundColor Cyan
 
