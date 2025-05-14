@@ -1,10 +1,10 @@
-# filepath: k8s-deployment.yaml
+# filepath: c:\Users\sdellalibera\source\repos\chatbot\kubernetes\backend-deployment.yaml
 apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: chatbot-backend
 spec:
-  replicas: 3
+  replicas: 1
   selector:
     matchLabels:
       app: chatbot-backend
@@ -13,49 +13,28 @@ spec:
       labels:
         app: chatbot-backend
     spec:
-      nodeSelector:
-        kubernetes.azure.com/agentpool: usernodepool
       containers:
       - name: chatbot-backend
         image: acrdemopn.azurecr.io/chatbot-backend:latest
         imagePullPolicy: Always
         env:
         - name: DOTNET_RUNNING_IN_CONTAINER
-          value: "true"
+          value: 'true'
         - name: ASPNETCORE_URLS
-          value: "http://+:8080"
+          value: 'http://+:8080'
         - name: ASPNETCORE_ENVIRONMENT
-          value: "Production"
+          value: 'Production'
         - name: ALLOWED_ORIGINS
-          value: "http://chatbot-frontend,http://chatbot-frontend.default.svc.cluster.local,https://*.azurewebsites.net"
+          value: 'http://chatbot-frontend,http://chatbot-frontend.default.svc.cluster.local,https://*.azurewebsites.net'
         resources:
           requests:
-            cpu: "50m"
-            memory: "256Mi"
+            cpu: '250m'
+            memory: '512Mi'
           limits:
-            cpu: "200m"
-            memory: "1Gi"
+            cpu: '1000m'
+            memory: '2Gi'
         ports:
         - containerPort: 8080
----
-apiVersion: autoscaling/v2
-kind: HorizontalPodAutoscaler
-metadata:
-  name: chatbot-backend-hpa
-spec:
-  scaleTargetRef:
-    apiVersion: apps/v1
-    kind: Deployment
-    name: chatbot-backend
-  minReplicas: 3
-  maxReplicas: 10
-  metrics:
-  - type: Resource
-    resource:
-      name: cpu
-      target:
-        type: Utilization
-        averageUtilization: 40
 ---
 apiVersion: v1
 kind: Service
