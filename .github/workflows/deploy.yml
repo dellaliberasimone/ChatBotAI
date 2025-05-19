@@ -3,8 +3,6 @@ name: Deploy ChatbotAI
 on:
   push:
     branches: [ "master" ]
-  pull_request:
-    branches: [ "master" ]
 
 env:
   AZURE_CONTAINER_REGISTRY: acrdemopn.azurecr.io
