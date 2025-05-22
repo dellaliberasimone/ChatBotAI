@@ -194,4 +194,4 @@ Write-Host "Frontend URL: $frontendUrl"
 - **Backend**: .NET 8, Azure OpenAI SDK, Azure Identity
 - **Frontend**: React, TypeScript, Axios
 - **Deployment**: Docker, Azure Container Apps, GitHub Actions
-- **Azure Services**: Azure OpenAI, Azure Container Registry, Azure Key Vault, Azure Container Apps
+- **Azure Services**: Azure OpenAI, Azure Container Registry, Azure Key Vault, Azure Container Apps.
