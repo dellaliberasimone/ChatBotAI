@@ -6,7 +6,7 @@ on:
   workflow_dispatch:
 
 env:
-  AZURE_CONTAINER_REGISTRY: acrchatbotai.azurecr.io  # This will be replaced by the actual ACR from deployment
+  ACR_LOGIN_SERVER: acrchatbotai.azurecr.io  # This will be replaced by the actual ACR from deployment
   BACKEND_CONTAINER_NAME: chatbot-backend
   FRONTEND_CONTAINER_NAME: chatbot-frontend
   RESOURCE_GROUP: rg-chatbotAI
