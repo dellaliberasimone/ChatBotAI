@@ -1,7 +1,7 @@
 name: Build and Push to Azure Container Registry
 
 on:
-  push:
+  pull_request:
     branches: [ master ]
   workflow_dispatch:
 
