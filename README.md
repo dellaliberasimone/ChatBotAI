@@ -132,17 +132,31 @@ The application will be available at:
 - Frontend: http://localhost:3000
 - Backend API: http://localhost:5000
 
-### 5. Deploy to Azure Container Apps
+### 5. CI/CD with GitHub Actions
 
-You can use the GitHub Actions workflow to deploy the application to Azure Container Apps. You need to set up the following secrets in your GitHub repository:
+#### 5.1 Automated Build and Push to ACR
 
-- `AZURE_CREDENTIALS`: Service principal credentials for Azure
-- `ACR_USERNAME`: Your ACR username
-- `ACR_PASSWORD`: Your ACR password
-- `AZURE_OPENAI_ENDPOINT`: Your Azure OpenAI endpoint
-- `KEYVAULT_URI`: Your Key Vault URI
+The repository includes a GitHub Actions workflow that automatically builds and pushes Docker images to Azure Container Registry (ACR) when you push to the `master` branch. To set this up, you need to add the following secrets to your GitHub repository:
 
-The workflow will build and push the Docker images to ACR and deploy them to Azure Container Apps.
+- `AZURE_CREDENTIALS`: Service principal credentials for Azure (JSON format)
+
+To create the service principal:
+
+```powershell
+$servicePrincipalName = "github-actions-chatbot"
+$subscriptionId = "<your-subscription-id>" 
+az ad sp create-for-rbac --name $servicePrincipalName --role Contributor --scopes /subscriptions/$subscriptionId --sdk-auth
+```
+
+The output of this command should be added as the `AZURE_CREDENTIALS` secret in your GitHub repository.
+
+When new code is pushed, the workflow will:
+1. Build the backend and frontend Docker images
+2. Push these images to your Azure Container Registry with both the Git commit SHA and `latest` tags
+
+#### 5.2 Manual Deployment to Container Apps
+
+After the images are pushed to ACR by the GitHub Actions workflow, you can manually deploy them to Azure Container Apps:
 
 #### Manual Deployment
 

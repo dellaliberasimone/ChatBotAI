@@ -1,4 +1,4 @@
-name: Deploy to Azure Container Apps
+name: Build and Push to Azure Container Registry
 
 on:
   push:
@@ -8,15 +8,11 @@ on:
 env:
   BACKEND_CONTAINER_NAME: chatbot-backend
   FRONTEND_CONTAINER_NAME: chatbot-frontend
-  RESOURCE_GROUP: rg-chatbotAI
-  BACKEND_APP_NAME: ca-chatbotai-backend-dev
-  FRONTEND_APP_NAME: ca-chatbotai-frontend-dev
-  CONTAINER_APPS_ENV_NAME: containerapp-env
   ACR_NAME: acrchatbotai
   ACR_LOGIN_SERVER: acrchatbotai.azurecr.io
 
 jobs:
-  build-and-deploy:
+  build-and-push:
     runs-on: ubuntu-latest
     
     steps:
@@ -36,18 +32,6 @@ jobs:
       uses: azure/login@v1
       with:
         creds: ${{ secrets.AZURE_CREDENTIALS }}
-        
-    - name: Check and create Container Apps Environment if needed
-      run: |
-        if ! az containerapp env show --name ${{ env.CONTAINER_APPS_ENV_NAME }} --resource-group ${{ env.RESOURCE_GROUP }} --query name 2>/dev/null; then
-          echo "Container Apps Environment does not exist. Creating..."
-          az containerapp env create \
-            --name ${{ env.CONTAINER_APPS_ENV_NAME }} \
-            --resource-group ${{ env.RESOURCE_GROUP }} \
-            --location $(az group show --name ${{ env.RESOURCE_GROUP }} --query location -o tsv)
-        else
-          echo "Container Apps Environment already exists."
-        fi
         
     - name: Log in to ACR
       run: |
@@ -69,80 +53,9 @@ jobs:
         push: true
         tags: ${{ env.ACR_LOGIN_SERVER }}/${{ env.FRONTEND_CONTAINER_NAME }}:${{ github.sha }}, ${{ env.ACR_LOGIN_SERVER }}/${{ env.FRONTEND_CONTAINER_NAME }}:latest
         
-    - name: Check and deploy backend Container App
+    - name: Display image information
       run: |
-        if az containerapp show --name ${{ env.BACKEND_APP_NAME }} --resource-group ${{ env.RESOURCE_GROUP }} --query name 2>/dev/null; then
-          echo "Backend Container App exists. Updating with new image..."
-          az containerapp update \
-            --name ${{ env.BACKEND_APP_NAME }} \
-            --resource-group ${{ env.RESOURCE_GROUP }} \
-            --image ${{ env.ACR_LOGIN_SERVER }}/${{ env.BACKEND_CONTAINER_NAME }}:${{ github.sha }}
-        else
-          echo "Backend Container App does not exist. Creating..."
-          az containerapp create \
-            --name ${{ env.BACKEND_APP_NAME }} \
-            --resource-group ${{ env.RESOURCE_GROUP }} \
-            --image ${{ env.ACR_LOGIN_SERVER }}/${{ env.BACKEND_CONTAINER_NAME }}:${{ github.sha }} \
-            --environment ${{ env.CONTAINER_APPS_ENV_NAME }} \
-            --ingress external \
-            --target-port 8080 \
-            --env-vars \
-              AZURE_OPENAI_ENDPOINT="${{ secrets.AZURE_OPENAI_ENDPOINT }}" \
-              AZURE_KEYVAULT_URI="${{ secrets.AZURE_KEYVAULT_URI }}" \
-            --registry-server ${{ env.ACR_LOGIN_SERVER }} \
-            --query properties.configuration.ingress.fqdn \
-            --output tsv
-        fi
-        
-    - name: Get backend URL
-      id: backend-url
-      run: |
-        BACKEND_URL=$(az containerapp show --name ${{ env.BACKEND_APP_NAME }} --resource-group ${{ env.RESOURCE_GROUP }} --query properties.configuration.ingress.fqdn --output tsv)
-        echo "BACKEND_URL=https://$BACKEND_URL" >> $GITHUB_OUTPUT
-        echo "Backend URL: https://$BACKEND_URL"
-        
-    - name: Check and deploy frontend Container App
-      run: |
-        if az containerapp show --name ${{ env.FRONTEND_APP_NAME }} --resource-group ${{ env.RESOURCE_GROUP }} --query name 2>/dev/null; then
-          echo "Frontend Container App exists. Updating with new image..."
-          az containerapp update \
-            --name ${{ env.FRONTEND_APP_NAME }} \
-            --resource-group ${{ env.RESOURCE_GROUP }} \
-            --image ${{ env.ACR_LOGIN_SERVER }}/${{ env.FRONTEND_CONTAINER_NAME }}:${{ github.sha }}
-        else
-          echo "Frontend Container App does not exist. Creating..."
-          az containerapp create \
-            --name ${{ env.FRONTEND_APP_NAME }} \
-            --resource-group ${{ env.RESOURCE_GROUP }} \
-            --image ${{ env.ACR_LOGIN_SERVER }}/${{ env.FRONTEND_CONTAINER_NAME }}:${{ github.sha }} \
-            --environment ${{ env.CONTAINER_APPS_ENV_NAME }} \
-            --ingress external \
-            --target-port 80 \
-            --env-vars \
-              VITE_API_BASE_URL="${{ steps.backend-url.outputs.BACKEND_URL }}" \
-            --registry-server ${{ env.ACR_LOGIN_SERVER }} \
-            --query properties.configuration.ingress.fqdn \
-            --output tsv
-        fi
-        
-    - name: Configure CORS for backend
-      run: |
-        FRONTEND_URL=$(az containerapp show --name ${{ env.FRONTEND_APP_NAME }} --resource-group ${{ env.RESOURCE_GROUP }} --query properties.configuration.ingress.fqdn --output tsv)
-        echo "Frontend URL: https://$FRONTEND_URL"
-        
-        az containerapp update \
-          --name ${{ env.BACKEND_APP_NAME }} \
-          --resource-group ${{ env.RESOURCE_GROUP }} \
-          --set-env-vars \
-            AZURE_OPENAI_ENDPOINT="${{ secrets.AZURE_OPENAI_ENDPOINT }}" \
-            AZURE_KEYVAULT_URI="${{ secrets.AZURE_KEYVAULT_URI }}" \
-            CORS_ORIGINS="https://$FRONTEND_URL"
-            
-    - name: Display deployment URLs
-      run: |
-        BACKEND_URL=$(az containerapp show --name ${{ env.BACKEND_APP_NAME }} --resource-group ${{ env.RESOURCE_GROUP }} --query properties.configuration.ingress.fqdn --output tsv)
-        FRONTEND_URL=$(az containerapp show --name ${{ env.FRONTEND_APP_NAME }} --resource-group ${{ env.RESOURCE_GROUP }} --query properties.configuration.ingress.fqdn --output tsv)
-        
-        echo "Deployment completed successfully!"
-        echo "Backend URL: https://$BACKEND_URL"
-        echo "Frontend URL: https://$FRONTEND_URL"
+        echo "Build and push completed successfully!"
+        echo "Backend image: ${{ env.ACR_LOGIN_SERVER }}/${{ env.BACKEND_CONTAINER_NAME }}:${{ github.sha }}"
+        echo "Frontend image: ${{ env.ACR_LOGIN_SERVER }}/${{ env.FRONTEND_CONTAINER_NAME }}:${{ github.sha }}"
+        echo "Latest images are also tagged for both containers."
