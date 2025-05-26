@@ -39,7 +39,7 @@ builder.Services.AddSingleton<AzureOpenAIClient>(sp =>
         var credential = new DefaultAzureCredential();
         //log extract secret from keyVault if necessary
         var keyVaultClient = new SecretClient(new Uri(keyVaultUri), credential);
-        var apiKey = keyVaultClient.GetSecret("AzureOpenAIKey").Value.Value;
+        var apiKey = keyVaultClient.GetSecret("apiKey").Value.Value;
         return new AzureOpenAIClient(new Uri(openAIEndpoint), new AzureKeyCredential(apiKey));
     }
     else
@@ -63,7 +63,7 @@ app.MapPost("/api/chat", async (ChatRequest request, AzureOpenAIClient azureClie
 {
     try 
     {
-        ChatClient chatClient = azureClient.GetChatClient("gpt-4o");
+        ChatClient chatClient = azureClient.GetChatClient("gpt-4o-mini");
         ChatCompletion completion = await chatClient.CompleteChatAsync(
         [
             new SystemChatMessage("Sei un assistente virtuale che risponde a delle domande di vita quotidiana"),
