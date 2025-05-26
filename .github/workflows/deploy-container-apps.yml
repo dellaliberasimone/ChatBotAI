@@ -2,17 +2,18 @@ name: Deploy to Azure Container Apps
 
 on:
   push:
-    branches: [ "master" ]
+    branches: [ master ]
   workflow_dispatch:
 
 env:
-  ACR_LOGIN_SERVER: acrchatbotai.azurecr.io  # This will be replaced by the actual ACR from deployment
   BACKEND_CONTAINER_NAME: chatbot-backend
   FRONTEND_CONTAINER_NAME: chatbot-frontend
   RESOURCE_GROUP: rg-chatbotAI
   BACKEND_APP_NAME: ca-chatbotai-backend-dev
   FRONTEND_APP_NAME: ca-chatbotai-frontend-dev
-  CONTAINER_APPS_ENV_NAME: containerapp-env  # The name of your Container Apps Environment
+  CONTAINER_APPS_ENV_NAME: containerapp-env
+  ACR_NAME: acrchatbotai
+  ACR_LOGIN_SERVER: acrchatbotai.azurecr.io
 
 jobs:
   build-and-deploy:
@@ -30,19 +31,12 @@ jobs:
       uses: actions/setup-node@v3
       with:
         node-version: '18'
-
+        
     - name: Log in to Azure
       uses: azure/login@v1
       with:
         creds: ${{ secrets.AZURE_CREDENTIALS }}
-      # Get the ACR details from the deployment
-    - name: Get ACR details
-      id: acr-details
-      run: |
-        ACR_LOGIN_SERVER=$(az deployment group show --resource-group ${{ env.RESOURCE_GROUP }} --name $(az deployment group list --resource-group ${{ env.RESOURCE_GROUP }} --query '[0].name' -o tsv) --query 'properties.outputs.acrLoginServer.value' -o tsv)
-        echo "ACR_LOGIN_SERVER=$ACR_LOGIN_SERVER" >> $GITHUB_ENV
         
-    # Ensure Container Apps Environment exists
     - name: Check and create Container Apps Environment if needed
       run: |
         if ! az containerapp env show --name ${{ env.CONTAINER_APPS_ENV_NAME }} --resource-group ${{ env.RESOURCE_GROUP }} --query name 2>/dev/null; then
@@ -56,11 +50,8 @@ jobs:
         fi
         
     - name: Log in to ACR
-      uses: azure/docker-login@v1
-      with:
-        login-server: ${{ env.ACR_LOGIN_SERVER }}
-        username: ${{ secrets.ACR_USERNAME }}
-        password: ${{ secrets.ACR_PASSWORD }}
+      run: |
+        az acr login --name ${{ env.ACR_NAME }}
         
     - name: Build and push backend image
       uses: docker/build-push-action@v5
@@ -77,10 +68,9 @@ jobs:
         file: ./frontend/Dockerfile
         push: true
         tags: ${{ env.ACR_LOGIN_SERVER }}/${{ env.FRONTEND_CONTAINER_NAME }}:${{ github.sha }}, ${{ env.ACR_LOGIN_SERVER }}/${{ env.FRONTEND_CONTAINER_NAME }}:latest
-          # Check if Container Apps exist and create/update them
+        
     - name: Check and deploy backend Container App
       run: |
-        # Check if backend Container App exists
         if az containerapp show --name ${{ env.BACKEND_APP_NAME }} --resource-group ${{ env.RESOURCE_GROUP }} --query name 2>/dev/null; then
           echo "Backend Container App exists. Updating with new image..."
           az containerapp update \
@@ -92,26 +82,27 @@ jobs:
           az containerapp create \
             --name ${{ env.BACKEND_APP_NAME }} \
             --resource-group ${{ env.RESOURCE_GROUP }} \
-            --environment ${{ env.CONTAINER_APPS_ENV_NAME }} \
             --image ${{ env.ACR_LOGIN_SERVER }}/${{ env.BACKEND_CONTAINER_NAME }}:${{ github.sha }} \
-            --target-port 80 \
+            --environment ${{ env.CONTAINER_APPS_ENV_NAME }} \
             --ingress external \
+            --target-port 8080 \
+            --env-vars \
+              AZURE_OPENAI_ENDPOINT="${{ secrets.AZURE_OPENAI_ENDPOINT }}" \
+              AZURE_KEYVAULT_URI="${{ secrets.AZURE_KEYVAULT_URI }}" \
             --registry-server ${{ env.ACR_LOGIN_SERVER }} \
-            --registry-username ${{ secrets.ACR_USERNAME }} \
-            --registry-password ${{ secrets.ACR_PASSWORD }} \
-            --env-vars "AzureOpenAI__Endpoint=${{ secrets.AZURE_OPENAI_ENDPOINT }}" "KeyVault__Uri=${{ secrets.KEYVAULT_URI }}"
+            --query properties.configuration.ingress.fqdn \
+            --output tsv
         fi
-    
-    # Get backend URL for frontend configuration
+        
     - name: Get backend URL
+      id: backend-url
       run: |
-        BACKEND_FQDN=$(az containerapp show --name ${{ env.BACKEND_APP_NAME }} --resource-group ${{ env.RESOURCE_GROUP }} --query properties.configuration.ingress.fqdn -o tsv)
-        echo "BACKEND_FQDN=$BACKEND_FQDN" >> $GITHUB_ENV
-        echo "Backend FQDN: $BACKEND_FQDN"
-          
+        BACKEND_URL=$(az containerapp show --name ${{ env.BACKEND_APP_NAME }} --resource-group ${{ env.RESOURCE_GROUP }} --query properties.configuration.ingress.fqdn --output tsv)
+        echo "BACKEND_URL=https://$BACKEND_URL" >> $GITHUB_OUTPUT
+        echo "Backend URL: https://$BACKEND_URL"
+        
     - name: Check and deploy frontend Container App
       run: |
-        # Check if frontend Container App exists
         if az containerapp show --name ${{ env.FRONTEND_APP_NAME }} --resource-group ${{ env.RESOURCE_GROUP }} --query name 2>/dev/null; then
           echo "Frontend Container App exists. Updating with new image..."
           az containerapp update \
@@ -123,37 +114,35 @@ jobs:
           az containerapp create \
             --name ${{ env.FRONTEND_APP_NAME }} \
             --resource-group ${{ env.RESOURCE_GROUP }} \
-            --environment ${{ env.CONTAINER_APPS_ENV_NAME }} \
             --image ${{ env.ACR_LOGIN_SERVER }}/${{ env.FRONTEND_CONTAINER_NAME }}:${{ github.sha }} \
-            --target-port 80 \
+            --environment ${{ env.CONTAINER_APPS_ENV_NAME }} \
             --ingress external \
+            --target-port 80 \
+            --env-vars \
+              VITE_API_BASE_URL="${{ steps.backend-url.outputs.BACKEND_URL }}" \
             --registry-server ${{ env.ACR_LOGIN_SERVER }} \
-            --registry-username ${{ secrets.ACR_USERNAME }} \
-            --registry-password ${{ secrets.ACR_PASSWORD }} \
-            --env-vars "REACT_APP_API_URL=https://${{ env.BACKEND_FQDN }}"
+            --query properties.configuration.ingress.fqdn \
+            --output tsv
         fi
         
-    # Update the CORS settings on the backend to allow the frontend URL
-    - name: Update backend CORS settings after frontend deployment
+    - name: Configure CORS for backend
       run: |
-        FRONTEND_FQDN=$(az containerapp show --name ${{ env.FRONTEND_APP_NAME }} --resource-group ${{ env.RESOURCE_GROUP }} --query properties.configuration.ingress.fqdn -o tsv)
-        echo "Updating backend CORS settings to allow frontend: https://$FRONTEND_FQDN"
+        FRONTEND_URL=$(az containerapp show --name ${{ env.FRONTEND_APP_NAME }} --resource-group ${{ env.RESOURCE_GROUP }} --query properties.configuration.ingress.fqdn --output tsv)
+        echo "Frontend URL: https://$FRONTEND_URL"
         
-        # Update the backend app with an environment variable for CORS
         az containerapp update \
           --name ${{ env.BACKEND_APP_NAME }} \
           --resource-group ${{ env.RESOURCE_GROUP }} \
-          --set-env-vars "ALLOWED_ORIGINS=https://$FRONTEND_FQDN,http://localhost:3000"
-        
-    - name: Get application URLs
-      id: get-urls
+          --set-env-vars \
+            AZURE_OPENAI_ENDPOINT="${{ secrets.AZURE_OPENAI_ENDPOINT }}" \
+            AZURE_KEYVAULT_URI="${{ secrets.AZURE_KEYVAULT_URI }}" \
+            CORS_ORIGINS="https://$FRONTEND_URL"
+            
+    - name: Display deployment URLs
       run: |
-        BACKEND_URL=$(az containerapp show --name ${{ env.BACKEND_APP_NAME }} --resource-group ${{ env.RESOURCE_GROUP }} --query properties.configuration.ingress.fqdn -o tsv)
-        FRONTEND_URL=$(az containerapp show --name ${{ env.FRONTEND_APP_NAME }} --resource-group ${{ env.RESOURCE_GROUP }} --query properties.configuration.ingress.fqdn -o tsv)
-        echo "BACKEND_URL=https://$BACKEND_URL" >> $GITHUB_ENV
-        echo "FRONTEND_URL=https://$FRONTEND_URL" >> $GITHUB_ENV
+        BACKEND_URL=$(az containerapp show --name ${{ env.BACKEND_APP_NAME }} --resource-group ${{ env.RESOURCE_GROUP }} --query properties.configuration.ingress.fqdn --output tsv)
+        FRONTEND_URL=$(az containerapp show --name ${{ env.FRONTEND_APP_NAME }} --resource-group ${{ env.RESOURCE_GROUP }} --query properties.configuration.ingress.fqdn --output tsv)
         
-    - name: Print application URLs
-      run: |
-        echo "Backend URL: ${{ env.BACKEND_URL }}"
-        echo "Frontend URL: ${{ env.FRONTEND_URL }}"
+        echo "Deployment completed successfully!"
+        echo "Backend URL: https://$BACKEND_URL"
+        echo "Frontend URL: https://$FRONTEND_URL"
