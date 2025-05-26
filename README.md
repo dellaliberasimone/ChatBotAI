@@ -1,93 +1,62 @@
 # Chatbot AI Project
 
-This project is a chatbot application built with a .NET backend and React frontend that integrates with Azure OpenAI services. The application can be run locally using Docker Compose or deployed to Azure Container Apps.
+This project is a chatbot application built with a .NET backend and React frontend that integrates with Azure OpenAI services. The application runs on Azure Container Apps and leverages GPT-4o mini model.
 
 ## Prerequisites
 
 - Git
-- Docker and Docker Compose
+- Docker and Docker Compose (for local development)
 - .NET 8.0 SDK
 - Node.js 18 or later
 - Azure CLI
 - Azure Subscription
 
-## Getting Started
+## Quick Setup Guide
 
-### 1. Clone the Repository
+This guide focuses on essential steps to get the application running quickly.
 
-```powershell
-git clone https://github.com/dellaliberasimone/ChatBotAI
-cd chatbot
-```
-
-### 2. Deploy Required Azure Resources
-
-Before running the application, you need to deploy the following Azure resources:
-
-#### 2.1 Azure Container Registry (ACR)
+### 1. Deploy Azure Resources
 
 ```powershell
 # Login to Azure
 az login
 
-# Create a resource group if you don't have one
+# Create a resource group
 $resourceGroup = "rg-chatbotAI"
-$location = "westeurope"
+$location = "westeurope"  # Choose a region where Azure OpenAI is available
 az group create --name $resourceGroup --location $location
 
-# Create Azure Container Registry
-$acrName = "acrchatbotai"
+# 1. Create Azure Container Registry
+$acrName = "acrchatbotai"  # Must be globally unique
 az acr create --resource-group $resourceGroup --name $acrName --sku Basic --admin-enabled true
 
-# Get ACR credentials
-$acrUsername = az acr credential show --name $acrName --query "username" -o tsv
-$acrPassword = az acr credential show --name $acrName --query "passwords[0].value" -o tsv
-
-Write-Host "ACR Username: $acrUsername"
-Write-Host "ACR Password: $acrPassword"
-```
-
-#### 2.2 Azure OpenAI Service
-
-```powershell
-# Create Azure OpenAI service
-$openaiName = "openai-chatbotai"
+# 2. Create Azure OpenAI service with GPT-4o mini model
+$openaiName = "openai-chatbotai"  # Must be globally unique
 az cognitiveservices account create --name $openaiName --resource-group $resourceGroup --location $location --kind OpenAI --sku s0
 
 # Deploy GPT-4o-mini model
-az cognitiveservices account deployment create --name $openaiName --resource-group $resourceGroup --deployment-name "gpt-4o" --model-name "gpt-4o" --model-version "2023-05-15" --model-format "OpenAI" --scale-settings-scale-type "Standard"
+az cognitiveservices account deployment create --name $openaiName --resource-group $resourceGroup --deployment-name "gpt-4o-mini" --model-name "gpt-4o-mini" --model-format "OpenAI" --scale-settings-scale-type "Standard"
 
-# Get the OpenAI endpoint
+# Get OpenAI endpoint and key
 $openaiEndpoint = az cognitiveservices account show --name $openaiName --resource-group $resourceGroup --query "endpoint" -o tsv
-
-# Get the OpenAI key
 $openaiKey = az cognitiveservices account keys list --name $openaiName --resource-group $resourceGroup --query "key1" -o tsv
 
-Write-Host "OpenAI Endpoint: $openaiEndpoint"
-Write-Host "OpenAI Key: $openaiKey"
-```
-
-#### 2.3 Azure Key Vault
-
-```powershell
-# Create Azure Key Vault
-$keyvaultName = "kv-chatbotai"
+# 3. Create Key Vault and store OpenAI key
+$keyvaultName = "kv-chatbotai"  # Must be globally unique
 az keyvault create --name $keyvaultName --resource-group $resourceGroup --location $location
-
-# Store OpenAI API Key in Key Vault
 az keyvault secret set --vault-name $keyvaultName --name "AzureOpenAIKey" --value $openaiKey
-
-# Get Key Vault URI
 $keyvaultUri = az keyvault show --name $keyvaultName --resource-group $resourceGroup --query "properties.vaultUri" -o tsv
 
+# Display important values
+Write-Host "OpenAI Endpoint: $openaiEndpoint"
 Write-Host "Key Vault URI: $keyvaultUri"
 ```
 
-### 3. Configure Application Settings
+### 2. Configure Application
 
-#### 3.1 Backend Settings
+#### Backend Settings
 
-Create or update `appsettings.json` with your Azure service details:
+Update `backend/appsettings.json` with your Azure service details:
 
 ```json
 {
@@ -99,10 +68,12 @@ Create or update `appsettings.json` with your Azure service details:
   },
   "AllowedHosts": "*",
   "AzureOpenAI": {
-    "Endpoint": "YOUR_OPENAI_ENDPOINT"
+    "Endpoint": "YOUR_OPENAI_ENDPOINT",
+    "DeploymentName": "gpt-4o-mini"
   },
   "KeyVault": {
-    "Uri": "YOUR_KEYVAULT_URI"
+    "Uri": "YOUR_KEYVAULT_URI",
+    "SecretName": "AzureOpenAIKey"
   },
   "Cors": {
     "AllowedOrigins": ["http://localhost:3000"]
@@ -110,97 +81,113 @@ Create or update `appsettings.json` with your Azure service details:
 }
 ```
 
-Replace `YOUR_OPENAI_ENDPOINT` with your OpenAI endpoint value and `YOUR_KEYVAULT_URI` with your Key Vault URI.
+Replace:
+- `YOUR_OPENAI_ENDPOINT` with your OpenAI endpoint value (e.g., `https://openai-chatbotai.openai.azure.com/`)
+- `YOUR_KEYVAULT_URI` with your Key Vault URI (e.g., `https://kv-chatbotai.vault.azure.net/`)
 
-#### 3.2 Frontend Settings
+#### Frontend Settings
 
-Create a `.env` file in the frontend directory:
+Create or update `frontend/.env` file:
 
 ```
 REACT_APP_API_URL=http://localhost:5000
 ```
 
-### 4. Run the Application Locally
-
-#### Using Docker Compose
+### 3. Run the Application Locally
 
 ```powershell
+# Option 1: Using Docker Compose
 docker-compose up --build
+
+# Option 2: Run backend and frontend separately
+# Backend
+cd backend
+dotnet run
+
+# Frontend (in a separate terminal)
+cd frontend
+npm install
+npm start
 ```
 
-The application will be available at:
+Access the application:
 - Frontend: http://localhost:3000
 - Backend API: http://localhost:5000
 
-### 5. CI/CD with GitHub Actions
+### 4. Deploy to Azure Container Apps
 
-#### 5.1 Automated Build and Push to ACR
-
-The repository includes a GitHub Actions workflow that automatically builds and pushes Docker images to Azure Container Registry (ACR) when you push to the `master` branch. To set this up, you need to add the following secrets to your GitHub repository:
-
-- `AZURE_CREDENTIALS`: Service principal credentials for Azure (JSON format)
-
-To create the service principal:
+Use our infrastructure templates for deployment:
 
 ```powershell
-$servicePrincipalName = "github-actions-chatbot"
-$subscriptionId = "<your-subscription-id>" 
-az ad sp create-for-rbac --name $servicePrincipalName --role Contributor --scopes /subscriptions/$subscriptionId --sdk-auth
-```
+# Get ACR credentials
+$acrUsername = az acr credential show --name $acrName --query "username" -o tsv
+$acrPassword = az acr credential show --name $acrName --query "passwords[0].value" -o tsv
 
-The output of this command should be added as the `AZURE_CREDENTIALS` secret in your GitHub repository.
-
-When new code is pushed, the workflow will:
-1. Build the backend and frontend Docker images
-2. Push these images to your Azure Container Registry with both the Git commit SHA and `latest` tags
-
-#### 5.2 Manual Deployment to Container Apps
-
-After the images are pushed to ACR by the GitHub Actions workflow, you can manually deploy them to Azure Container Apps:
-
-#### Manual Deployment
-
-Alternatively, you can deploy manually using Azure CLI:
-
-```powershell
-# Build and push backend image
+# Build and push images to ACR
 docker build -t $acrName.azurecr.io/chatbot-backend:latest ./backend
-docker push $acrName.azurecr.io/chatbot-backend:latest
-
-# Build and push frontend image
 docker build -t $acrName.azurecr.io/chatbot-frontend:latest ./frontend
+az acr login --name $acrName
+docker push $acrName.azurecr.io/chatbot-backend:latest
 docker push $acrName.azurecr.io/chatbot-frontend:latest
 
+# Deploy using Bicep template (recommended)
+cd infrastructure
+az deployment group create --resource-group $resourceGroup --template-file container-apps-infra.bicep --parameters container-apps-infra.parameters.json acrName=$acrName acrUsername=$acrUsername acrPassword=$acrPassword openAiEndpoint=$openaiEndpoint keyVaultUri=$keyvaultUri
+```
+
+For a simpler deployment using Azure CLI:
+
+```powershell
 # Create Container Apps Environment
-$envName = "containerapp-env"
+$envName = "chatbot-env"
 az containerapp env create --name $envName --resource-group $resourceGroup --location $location
 
-# Create backend Container App
-az containerapp create --name "ca-chatbotai-backend-dev" --resource-group $resourceGroup --environment $envName --image "$acrName.azurecr.io/chatbot-backend:latest" --target-port 80 --ingress external --registry-server "$acrName.azurecr.io" --registry-username $acrUsername --registry-password $acrPassword --env-vars "AzureOpenAI__Endpoint=$openaiEndpoint" "KeyVault__Uri=$keyvaultUri"
+# Deploy backend
+az containerapp create --name "ca-chatbot-backend" --resource-group $resourceGroup --environment $envName --image "$acrName.azurecr.io/chatbot-backend:latest" --target-port 80 --ingress external --registry-server "$acrName.azurecr.io" --registry-username $acrUsername --registry-password $acrPassword --env-vars "AzureOpenAI__Endpoint=$openaiEndpoint" "KeyVault__Uri=$keyvaultUri" "AzureOpenAI__DeploymentName=gpt-4o-mini" "KeyVault__SecretName=AzureOpenAIKey"
 
-# Get backend URL
-$backendFqdn = az containerapp show --name "ca-chatbotai-backend-dev" --resource-group $resourceGroup --query properties.configuration.ingress.fqdn -o tsv
+# Get backend URL for frontend configuration
+$backendFqdn = az containerapp show --name "ca-chatbot-backend" --resource-group $resourceGroup --query properties.configuration.ingress.fqdn -o tsv
 
-# Create frontend Container App
-az containerapp create --name "ca-chatbotai-frontend-dev" --resource-group $resourceGroup --environment $envName --image "$acrName.azurecr.io/chatbot-frontend:latest" --target-port 80 --ingress external --registry-server "$acrName.azurecr.io" --registry-username $acrUsername --registry-password $acrPassword --env-vars "REACT_APP_API_URL=https://$backendFqdn"
+# Deploy frontend
+az containerapp create --name "ca-chatbot-frontend" --resource-group $resourceGroup --environment $envName --image "$acrName.azurecr.io/chatbot-frontend:latest" --target-port 80 --ingress external --registry-server "$acrName.azurecr.io" --registry-username $acrUsername --registry-password $acrPassword --env-vars "REACT_APP_API_URL=https://$backendFqdn"
 
-# Update CORS settings on backend
-$frontendFqdn = az containerapp show --name "ca-chatbotai-frontend-dev" --resource-group $resourceGroup --query properties.configuration.ingress.fqdn -o tsv
-az containerapp update --name "ca-chatbotai-backend-dev" --resource-group $resourceGroup --set-env-vars "ALLOWED_ORIGINS=https://$frontendFqdn,http://localhost:3000"
+# Configure CORS on backend
+$frontendFqdn = az containerapp show --name "ca-chatbot-frontend" --resource-group $resourceGroup --query properties.configuration.ingress.fqdn -o tsv
+az containerapp update --name "ca-chatbot-backend" --resource-group $resourceGroup --set-env-vars "Cors__AllowedOrigins__0=https://$frontendFqdn"
 
-# Get application URLs
-$backendUrl = "https://$backendFqdn"
-$frontendUrl = "https://$frontendFqdn"
-
-Write-Host "Backend URL: $backendUrl"
-Write-Host "Frontend URL: $frontendUrl"
+# Display application URLs
+Write-Host "Backend URL: https://$backendFqdn"
+Write-Host "Frontend URL: https://$frontendFqdn"
 ```
+
+## CI/CD with GitHub Actions
+
+Our project includes GitHub Actions workflows to automate the build and deployment process.
+
+### Setting up GitHub Actions
+
+1. Add the following secrets to your GitHub repository:
+
+   - `AZURE_CREDENTIALS`: Service principal credentials for Azure (JSON format)
+   - `ACR_NAME`: Your Azure Container Registry name
+   - `RESOURCE_GROUP`: Your resource group name
+
+2. Create a service principal for GitHub Actions:
+
+   ```powershell
+   $subscriptionId = "<your-subscription-id>"  # Replace with your actual subscription ID
+   az ad sp create-for-rbac --name "github-actions-chatbot" --role Contributor --scopes /subscriptions/$subscriptionId --sdk-auth
+   ```
+
+   The output JSON should be added as the `AZURE_CREDENTIALS` secret.
+
+3. Push to the repository to trigger the workflow that will build and push Docker images to ACR.
 
 ## Project Structure
 
 - `/backend`: .NET 8 API that communicates with Azure OpenAI
 - `/frontend`: React TypeScript application for the chat interface
-- `/.github`: GitHub Actions workflow files for CI/CD
+- `/.github/workflows`: GitHub Actions workflow files for CI/CD
 - `/docker-compose.yml`: Configuration for local development
 
 ## Technologies Used
@@ -208,4 +195,16 @@ Write-Host "Frontend URL: $frontendUrl"
 - **Backend**: .NET 8, Azure OpenAI SDK, Azure Identity
 - **Frontend**: React, TypeScript, Axios
 - **Deployment**: Docker, Azure Container Apps, GitHub Actions
-- **Azure Services**: Azure OpenAI, Azure Container Registry, Azure Key Vault, Azure Container Apps.
+- **Azure Services**: 
+  - **Azure OpenAI**: Provides the GPT-4o mini model for chat capabilities
+  - **Azure Container Registry**: Stores Docker container images
+  - **Azure Key Vault**: Securely stores API keys
+  - **Azure Container Apps**: Hosts both backend and frontend applications
+
+## Troubleshooting
+
+- **Missing Azure OpenAI permissions**: Ensure your account has access to Azure OpenAI services
+- **Deployment region issues**: Make sure to deploy Azure OpenAI in a supported region
+- **CORS errors**: Verify the backend Container App has proper CORS configuration for the frontend URL
+- **Environment variables**: Ensure all required environment variables are set correctly in both frontend and backend
+- **Authentication errors**: Check that the Key Vault identity has proper permissions to access secrets
