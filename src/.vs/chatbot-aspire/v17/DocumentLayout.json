@@ -1,0 +1,78 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "C:\\Users\\sdellalibera\\source\\repos\\chatbot-aspire\\src\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{82969919-02A7-82FB-319B-BC53DA90DEF4}|AppHost\\AppHost.csproj|c:\\users\\sdellalibera\\source\\repos\\chatbot-aspire\\src\\apphost\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{82969919-02A7-82FB-319B-BC53DA90DEF4}|AppHost\\AppHost.csproj|solutionrelative:apphost\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{2716E304-899E-5250-0665-40290CAB2B35}|backend\\chatbotAPI.csproj|c:\\users\\sdellalibera\\source\\repos\\chatbot-aspire\\src\\backend\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{2716E304-899E-5250-0665-40290CAB2B35}|backend\\chatbotAPI.csproj|solutionrelative:backend\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{82969919-02A7-82FB-319B-BC53DA90DEF4}|AppHost\\AppHost.csproj|c:\\users\\sdellalibera\\source\\repos\\chatbot-aspire\\src\\apphost\\apphost.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|",
+      "RelativeMoniker": "D:0:0:{82969919-02A7-82FB-319B-BC53DA90DEF4}|AppHost\\AppHost.csproj|solutionrelative:apphost\\apphost.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 3,
+          "Children": [
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{1c4feeaa-4718-4aa9-859d-94ce25d182ba}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{3ae79031-e1bc-11d0-8f78-00a0c9110057}"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "AppHost.csproj",
+              "DocumentMoniker": "C:\\Users\\sdellalibera\\source\\repos\\chatbot-aspire\\src\\AppHost\\AppHost.csproj",
+              "RelativeDocumentMoniker": "AppHost\\AppHost.csproj",
+              "ToolTip": "C:\\Users\\sdellalibera\\source\\repos\\chatbot-aspire\\src\\AppHost\\AppHost.csproj",
+              "RelativeToolTip": "AppHost\\AppHost.csproj",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000758|",
+              "WhenOpened": "2025-07-01T08:32:56.654Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "Program.cs",
+              "DocumentMoniker": "C:\\Users\\sdellalibera\\source\\repos\\chatbot-aspire\\src\\AppHost\\Program.cs",
+              "RelativeDocumentMoniker": "AppHost\\Program.cs",
+              "ToolTip": "C:\\Users\\sdellalibera\\source\\repos\\chatbot-aspire\\src\\AppHost\\Program.cs",
+              "RelativeToolTip": "AppHost\\Program.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAsAAABTAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-06-29T14:27:13.322Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "Program.cs",
+              "DocumentMoniker": "C:\\Users\\sdellalibera\\source\\repos\\chatbot-aspire\\src\\backend\\Program.cs",
+              "RelativeDocumentMoniker": "backend\\Program.cs",
+              "ToolTip": "C:\\Users\\sdellalibera\\source\\repos\\chatbot-aspire\\src\\backend\\Program.cs",
+              "RelativeToolTip": "backend\\Program.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABsAAAAYAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-06-24T14:30:38.421Z",
+              "EditorCaption": ""
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

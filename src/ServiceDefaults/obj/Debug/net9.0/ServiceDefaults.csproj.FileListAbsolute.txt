@@ -1,0 +1,13 @@
+C:\Users\sdellalibera\source\repos\chatbot-aspire\src\ServiceDefaults\bin\Debug\net9.0\ServiceDefaults.deps.json
+C:\Users\sdellalibera\source\repos\chatbot-aspire\src\ServiceDefaults\bin\Debug\net9.0\ServiceDefaults.dll
+C:\Users\sdellalibera\source\repos\chatbot-aspire\src\ServiceDefaults\bin\Debug\net9.0\ServiceDefaults.pdb
+C:\Users\sdellalibera\source\repos\chatbot-aspire\src\ServiceDefaults\obj\Debug\net9.0\ServiceDefaults.csproj.AssemblyReference.cache
+C:\Users\sdellalibera\source\repos\chatbot-aspire\src\ServiceDefaults\obj\Debug\net9.0\ServiceDefaults.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\sdellalibera\source\repos\chatbot-aspire\src\ServiceDefaults\obj\Debug\net9.0\ServiceDefaults.AssemblyInfoInputs.cache
+C:\Users\sdellalibera\source\repos\chatbot-aspire\src\ServiceDefaults\obj\Debug\net9.0\ServiceDefaults.AssemblyInfo.cs
+C:\Users\sdellalibera\source\repos\chatbot-aspire\src\ServiceDefaults\obj\Debug\net9.0\ServiceDefaults.csproj.CoreCompileInputs.cache
+C:\Users\sdellalibera\source\repos\chatbot-aspire\src\ServiceDefaults\obj\Debug\net9.0\ServiceDefaults.sourcelink.json
+C:\Users\sdellalibera\source\repos\chatbot-aspire\src\ServiceDefaults\obj\Debug\net9.0\ServiceDefaults.dll
+C:\Users\sdellalibera\source\repos\chatbot-aspire\src\ServiceDefaults\obj\Debug\net9.0\refint\ServiceDefaults.dll
+C:\Users\sdellalibera\source\repos\chatbot-aspire\src\ServiceDefaults\obj\Debug\net9.0\ServiceDefaults.pdb
+C:\Users\sdellalibera\source\repos\chatbot-aspire\src\ServiceDefaults\obj\Debug\net9.0\ref\ServiceDefaults.dll

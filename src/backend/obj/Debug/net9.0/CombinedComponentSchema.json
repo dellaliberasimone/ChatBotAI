@@ -1,0 +1,281 @@
+{
+  "properties": {
+    "Aspire": {
+      "type": "object",
+      "properties": {
+        "OpenAI": {
+          "type": "object",
+          "properties": {
+            "ClientOptions": {
+              "type": "object",
+              "properties": {
+                "Endpoint": {
+                  "type": "string",
+                  "format": "uri",
+                  "description": "The service endpoint that the client will send requests to. If not set, the default endpoint will be used."
+                },
+                "NetworkTimeout": {
+                  "type": "string",
+                  "pattern": "^-?(\\d{1,7}|((\\d{1,7}[\\.:])?(([01]?\\d|2[0-3]):[0-5]?\\d|([01]?\\d|2[0-3]):[0-5]?\\d:[0-5]?\\d)(\\.\\d{1,7})?))$",
+                  "description": "The timeout applied to an individual network operation."
+                },
+                "OrganizationId": {
+                  "type": "string",
+                  "description": "The value to use for the OpenAI-Organization request header. Users who belong to multiple organizations can set this value to specify which organization is used for an API request. Usage from these API requests will count against the specified organization\u0027s quota. If not set, the header will be omitted, and the default organization will be billed. You can change your default organization in your user settings. Learn more."
+                },
+                "ProjectId": {
+                  "type": "string",
+                  "description": "The value to use for the OpenAI-Project request header. Users who are accessing their projects through their legacy user API key can set this value to specify which project is used for an API request. Usage from these API requests will count as usage for the specified project. If not set, the header will be omitted, and the default project will be accessed."
+                },
+                "UserAgentApplicationId": {
+                  "type": "string",
+                  "description": "An optional application ID to use as part of the request User-Agent header."
+                }
+              },
+              "description": "The options to configure the client."
+            },
+            "DisableMetrics": {
+              "type": "boolean",
+              "description": "Gets or sets a boolean value that indicates whether the OpenTelemetry metrics are enabled or not."
+            },
+            "DisableTracing": {
+              "type": "boolean",
+              "description": "Gets or sets a boolean value that indicates whether the OpenTelemetry tracing is disabled or not."
+            },
+            "Endpoint": {
+              "type": "string",
+              "format": "uri",
+              "description": "Gets or sets a \u0027System.Uri\u0027 referencing the OpenAI REST API endpoint. Leave empty to connect to OpenAI, or set it to use a service using an API compatible with OpenAI."
+            },
+            "Key": {
+              "type": "string",
+              "description": "Gets or sets a the API key to used to authenticate with the service."
+            }
+          },
+          "description": "The settings relevant to accessing OpenAI."
+        },
+        "Azure": {
+          "type": "object",
+          "properties": {
+            "Security": {
+              "type": "object",
+              "properties": {
+                "KeyVault": {
+                  "type": "object",
+                  "properties": {
+                    "ClientOptions": {
+                      "type": "object",
+                      "properties": {
+                        "Diagnostics": {
+                          "type": "object",
+                          "properties": {
+                            "ApplicationId": {
+                              "type": "string",
+                              "description": "Gets or sets the value sent as the first part of \u0022User-Agent\u0022 headers for all requests issues by this client. Defaults to \u0027Azure.Core.DiagnosticsOptions.DefaultApplicationId\u0027."
+                            },
+                            "DefaultApplicationId": {
+                              "type": "string",
+                              "description": "Gets or sets the default application id. Default application id would be set on all instances."
+                            },
+                            "IsDistributedTracingEnabled": {
+                              "type": "boolean",
+                              "description": "Gets or sets value indicating whether distributed tracing activities (\u0027System.Diagnostics.Activity\u0027) are going to be created for the clients methods calls and HTTP calls."
+                            },
+                            "IsLoggingContentEnabled": {
+                              "type": "boolean",
+                              "description": "Gets or sets value indicating if request or response content should be logged."
+                            },
+                            "IsLoggingEnabled": {
+                              "type": "boolean",
+                              "description": "Get or sets value indicating whether HTTP pipeline logging is enabled."
+                            },
+                            "IsTelemetryEnabled": {
+                              "type": "boolean",
+                              "description": "Gets or sets value indicating whether the \u0022User-Agent\u0022 header containing \u0027Azure.Core.DiagnosticsOptions.ApplicationId\u0027, client library package name and version, \u0027System.Runtime.InteropServices.RuntimeInformation.FrameworkDescription\u0027 and \u0027System.Runtime.InteropServices.RuntimeInformation.OSDescription\u0027 should be sent. The default value can be controlled process wide by setting AZURE_TELEMETRY_DISABLED to true, false, 1 or 0."
+                            },
+                            "LoggedContentSizeLimit": {
+                              "type": "integer",
+                              "description": "Gets or sets value indicating maximum size of content to log in bytes. Defaults to 4096."
+                            },
+                            "LoggedHeaderNames": {
+                              "type": "array",
+                              "items": {
+                                "type": "string"
+                              },
+                              "description": "Gets a list of header names that are not redacted during logging."
+                            },
+                            "LoggedQueryParameters": {
+                              "type": "array",
+                              "items": {
+                                "type": "string"
+                              },
+                              "description": "Gets a list of query parameter names that are not redacted during logging."
+                            }
+                          },
+                          "description": "Gets the client diagnostic options."
+                        },
+                        "DisableChallengeResourceVerification": {
+                          "type": "boolean",
+                          "description": "Gets or sets whether to disable verification that the authentication challenge resource matches the Key Vault domain."
+                        },
+                        "Retry": {
+                          "type": "object",
+                          "properties": {
+                            "Delay": {
+                              "type": "string",
+                              "pattern": "^-?(\\d{1,7}|((\\d{1,7}[\\.:])?(([01]?\\d|2[0-3]):[0-5]?\\d|([01]?\\d|2[0-3]):[0-5]?\\d:[0-5]?\\d)(\\.\\d{1,7})?))$",
+                              "description": "The delay between retry attempts for a fixed approach or the delay on which to base calculations for a backoff-based approach. If the service provides a Retry-After response header, the next retry will be delayed by the duration specified by the header value."
+                            },
+                            "MaxDelay": {
+                              "type": "string",
+                              "pattern": "^-?(\\d{1,7}|((\\d{1,7}[\\.:])?(([01]?\\d|2[0-3]):[0-5]?\\d|([01]?\\d|2[0-3]):[0-5]?\\d:[0-5]?\\d)(\\.\\d{1,7})?))$",
+                              "description": "The maximum permissible delay between retry attempts when the service does not provide a Retry-After response header. If the service provides a Retry-After response header, the next retry will be delayed by the duration specified by the header value."
+                            },
+                            "MaxRetries": {
+                              "type": "integer",
+                              "description": "The maximum number of retry attempts before giving up."
+                            },
+                            "Mode": {
+                              "enum": [
+                                "Fixed",
+                                "Exponential"
+                              ],
+                              "description": "The approach to use for calculating retry delays."
+                            },
+                            "NetworkTimeout": {
+                              "type": "string",
+                              "pattern": "^-?(\\d{1,7}|((\\d{1,7}[\\.:])?(([01]?\\d|2[0-3]):[0-5]?\\d|([01]?\\d|2[0-3]):[0-5]?\\d:[0-5]?\\d)(\\.\\d{1,7})?))$",
+                              "description": "The timeout applied to an individual network operations."
+                            }
+                          },
+                          "description": "Gets the client retry options."
+                        }
+                      },
+                      "description": "Options that allow you to configure the requests sent to Key Vault."
+                    },
+                    "DisableHealthChecks": {
+                      "type": "boolean",
+                      "description": "Gets or sets a boolean value that indicates whether the Key Vault health check is disabled or not.",
+                      "default": false
+                    },
+                    "DisableTracing": {
+                      "type": "boolean",
+                      "description": "Gets or sets a boolean value that indicates whether the OpenTelemetry tracing is disabled or not.",
+                      "default": false
+                    },
+                    "VaultUri": {
+                      "type": "string",
+                      "format": "uri",
+                      "description": "A \u0027System.Uri\u0027 to the vault on which the client operates. Appears as \u0022DNS Name\u0022 in the Azure portal. If you have a secret \u0027System.Uri\u0027, use \u0027Azure.Security.KeyVault.Secrets.KeyVaultSecretIdentifier\u0027 to parse the \u0027Azure.Security.KeyVault.Secrets.KeyVaultSecretIdentifier.VaultUri\u0027 and other information. You should validate that this URI references a valid Key Vault resource. See https://aka.ms/azsdk/blog/vault-uri for details."
+                    }
+                  },
+                  "description": "Provides the client configuration settings for connecting to Azure Key Vault."
+                }
+              }
+            },
+            "AI": {
+              "type": "object",
+              "properties": {
+                "OpenAI": {
+                  "type": "object",
+                  "properties": {
+                    "ClientOptions": {
+                      "type": "object",
+                      "properties": {
+                        "ClientLoggingOptions": {
+                          "type": "object",
+                          "properties": {
+                            "AllowedHeaderNames": {
+                              "type": "array",
+                              "items": {
+                                "type": "string"
+                              },
+                              "description": "Gets or sets a list of header names that are not redacted during logging."
+                            },
+                            "AllowedQueryParameters": {
+                              "type": "array",
+                              "items": {
+                                "type": "string"
+                              },
+                              "description": "Gets or sets a list of query parameter names that are not redacted during logging."
+                            },
+                            "EnableLogging": {
+                              "type": "boolean",
+                              "description": "Gets or sets value indicating if logging should be enabled in this client pipeline."
+                            },
+                            "EnableMessageContentLogging": {
+                              "type": "boolean",
+                              "description": "Gets or sets value indicating if request and response content should be logged."
+                            },
+                            "EnableMessageLogging": {
+                              "type": "boolean",
+                              "description": "Gets or sets value indicating if request and response uri and header information should be logged."
+                            },
+                            "MessageContentSizeLimit": {
+                              "type": "integer",
+                              "description": "Gets or sets value indicating maximum size of content to log in bytes."
+                            }
+                          },
+                          "description": "The options to be used to configure logging within the \u0027System.ClientModel.Primitives.ClientPipeline\u0027."
+                        },
+                        "EnableDistributedTracing": {
+                          "type": "boolean",
+                          "description": "Gets or sets whether distributed tracing should be enabled. If null, this value will be treated as true. The default is null."
+                        },
+                        "NetworkTimeout": {
+                          "type": "string",
+                          "pattern": "^-?(\\d{1,7}|((\\d{1,7}[\\.:])?(([01]?\\d|2[0-3]):[0-5]?\\d|([01]?\\d|2[0-3]):[0-5]?\\d:[0-5]?\\d)(\\.\\d{1,7})?))$",
+                          "description": "The timeout applied to an individual network operation."
+                        },
+                        "UserAgentApplicationId": {
+                          "type": "string",
+                          "description": "An optional application ID to use as part of the request User-Agent header."
+                        }
+                      },
+                      "description": "Defines the scenario-independent, client-level options for the Azure-specific OpenAI client."
+                    },
+                    "DisableMetrics": {
+                      "type": "boolean",
+                      "description": "Gets or sets a boolean value that indicates whether the OpenTelemetry metrics are enabled or not."
+                    },
+                    "DisableTracing": {
+                      "type": "boolean",
+                      "description": "Gets or sets a boolean value that indicates whether the OpenTelemetry tracing is disabled or not."
+                    },
+                    "Endpoint": {
+                      "type": "string",
+                      "format": "uri",
+                      "description": "Gets or sets a \u0027System.Uri\u0027 referencing the Azure OpenAI endpoint. This is likely to be similar to \u0022https://{account_name}.openai.azure.com\u0022."
+                    },
+                    "Key": {
+                      "type": "string",
+                      "description": "Gets or sets the key to use to authenticate to the Azure OpenAI endpoint."
+                    }
+                  },
+                  "description": "The settings relevant to accessing Azure OpenAI or OpenAI."
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "logLevel": {
+      "properties": {
+        "Azure": {
+          "$ref": "#/definitions/logLevelThreshold"
+        },
+        "Azure.Core": {
+          "$ref": "#/definitions/logLevelThreshold"
+        },
+        "Azure.Identity": {
+          "$ref": "#/definitions/logLevelThreshold"
+        }
+      }
+    }
+  },
+  "type": "object",
+  "SourceSegments": "C:\\Users\\sdellalibera\\.nuget\\packages\\aspire.openai\\9.3.1-preview.1.25305.6\\ConfigurationSchema.json;C:\\Users\\sdellalibera\\.nuget\\packages\\aspire.azure.security.keyvault\\9.3.1\\ConfigurationSchema.json;C:\\Users\\sdellalibera\\.nuget\\packages\\aspire.azure.ai.openai\\9.3.1-preview.1.25305.6\\ConfigurationSchema.json"
+}
