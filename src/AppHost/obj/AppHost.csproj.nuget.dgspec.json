@@ -67,6 +67,10 @@
               "target": "Package",
               "version": "[9.3.1, )"
             },
+            "Aspire.Hosting.Azure.Search": {
+              "target": "Package",
+              "version": "[9.3.1, )"
+            },
             "Aspire.Hosting.NodeJs": {
               "target": "Package",
               "version": "[9.3.1, )"
@@ -93,7 +97,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.301/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.302/PortableRuntimeIdentifierGraph.json"
         }
       }
     }

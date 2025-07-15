@@ -10,6 +10,7 @@
     <Import Project="$(NuGetPackageRoot)microsoft.visualstudio.azure.containers.tools.targets\1.22.1-preview.1\build\Microsoft.VisualStudio.Azure.Containers.Tools.Targets.targets" Condition="Exists('$(NuGetPackageRoot)microsoft.visualstudio.azure.containers.tools.targets\1.22.1-preview.1\build\Microsoft.VisualStudio.Azure.Containers.Tools.Targets.targets')" />
     <Import Project="$(NuGetPackageRoot)aspire.openai\9.3.1-preview.1.25305.6\buildTransitive\net8.0\Aspire.OpenAI.targets" Condition="Exists('$(NuGetPackageRoot)aspire.openai\9.3.1-preview.1.25305.6\buildTransitive\net8.0\Aspire.OpenAI.targets')" />
     <Import Project="$(NuGetPackageRoot)aspire.azure.security.keyvault\9.3.1\buildTransitive\net8.0\Aspire.Azure.Security.KeyVault.targets" Condition="Exists('$(NuGetPackageRoot)aspire.azure.security.keyvault\9.3.1\buildTransitive\net8.0\Aspire.Azure.Security.KeyVault.targets')" />
+    <Import Project="$(NuGetPackageRoot)aspire.azure.search.documents\9.3.1\buildTransitive\net8.0\Aspire.Azure.Search.Documents.targets" Condition="Exists('$(NuGetPackageRoot)aspire.azure.search.documents\9.3.1\buildTransitive\net8.0\Aspire.Azure.Search.Documents.targets')" />
     <Import Project="$(NuGetPackageRoot)aspire.azure.ai.openai\9.3.1-preview.1.25305.6\buildTransitive\net8.0\Aspire.Azure.AI.OpenAI.targets" Condition="Exists('$(NuGetPackageRoot)aspire.azure.ai.openai\9.3.1-preview.1.25305.6\buildTransitive\net8.0\Aspire.Azure.AI.OpenAI.targets')" />
   </ImportGroup>
 </Project>

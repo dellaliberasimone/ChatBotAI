@@ -5,6 +5,7 @@ using OpenAI.Chat;
 using ChatClasses;
 using System;
 
+
 var MyAllowSpecificOrigins = "_MyAllowSpecificOrigins";
 
 var builder = WebApplication.CreateBuilder(args);
@@ -12,6 +13,10 @@ var builder = WebApplication.CreateBuilder(args);
 builder.AddServiceDefaults();
 
 var frontendEndpoint = Environment.GetEnvironmentVariable("services__react__endpoint__0");
+
+builder.AddAzureOpenAIClient(connectionName: "azureOpenAI");
+
+builder.AddAzureSearchClient(connectionName:"search");
 
 builder.Services.AddCors(option =>
 {
@@ -28,8 +33,6 @@ builder.Services.AddCors(option =>
             policy.AllowAnyHeader().AllowAnyMethod();
         });
 });
-    
-builder.AddAzureOpenAIClient(connectionName: "azureOpenAI");
 
 var app = builder.Build();
 
@@ -73,6 +76,7 @@ app.MapPost("/api/chat", async (ChatRequest request,OpenAIClient AIClient) =>
         });
     }
 });
+
 
 app.Run();
 

@@ -1,8 +1,11 @@
+using Aspire.Hosting;
+
 var builder = DistributedApplication.CreateBuilder(args);
 
 //configure openai endpoint
-var openAI = builder.AddConnectionString("azureOpenAI");
-//var openAI = builder.AddAzureOpenAI("azureOpenAI");
+var openAI = builder.AddAzureOpenAI("azureOpenAI");
+
+var search = builder.AddAzureSearch("search");
 
 //configure backend project
 var backend = builder.AddProject<Projects.chatbotAPI>("chatbotAPI")

@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "Wc9LCjOe/LA=",
+  "dgSpecHash": "2eBrHP1BzCE=",
   "success": true,
   "projectFilePath": "C:\\Users\\sdellalibera\\source\\repos\\chatbot-aspire\\src\\AppHost\\AppHost.csproj",
   "expectedPackageFiles": [
@@ -10,6 +10,7 @@
     "C:\\Users\\sdellalibera\\.nuget\\packages\\aspire.hosting.azure\\9.3.1\\aspire.hosting.azure.9.3.1.nupkg.sha512",
     "C:\\Users\\sdellalibera\\.nuget\\packages\\aspire.hosting.azure.cognitiveservices\\9.3.1\\aspire.hosting.azure.cognitiveservices.9.3.1.nupkg.sha512",
     "C:\\Users\\sdellalibera\\.nuget\\packages\\aspire.hosting.azure.keyvault\\9.3.1\\aspire.hosting.azure.keyvault.9.3.1.nupkg.sha512",
+    "C:\\Users\\sdellalibera\\.nuget\\packages\\aspire.hosting.azure.search\\9.3.1\\aspire.hosting.azure.search.9.3.1.nupkg.sha512",
     "C:\\Users\\sdellalibera\\.nuget\\packages\\aspire.hosting.nodejs\\9.3.1\\aspire.hosting.nodejs.9.3.1.nupkg.sha512",
     "C:\\Users\\sdellalibera\\.nuget\\packages\\aspire.hosting.orchestration.win-x64\\9.3.1\\aspire.hosting.orchestration.win-x64.9.3.1.nupkg.sha512",
     "C:\\Users\\sdellalibera\\.nuget\\packages\\aspnetcore.healthchecks.uris\\9.0.0\\aspnetcore.healthchecks.uris.9.0.0.nupkg.sha512",
@@ -18,6 +19,7 @@
     "C:\\Users\\sdellalibera\\.nuget\\packages\\azure.provisioning\\1.0.0\\azure.provisioning.1.0.0.nupkg.sha512",
     "C:\\Users\\sdellalibera\\.nuget\\packages\\azure.provisioning.cognitiveservices\\1.0.0\\azure.provisioning.cognitiveservices.1.0.0.nupkg.sha512",
     "C:\\Users\\sdellalibera\\.nuget\\packages\\azure.provisioning.keyvault\\1.0.0\\azure.provisioning.keyvault.1.0.0.nupkg.sha512",
+    "C:\\Users\\sdellalibera\\.nuget\\packages\\azure.provisioning.search\\1.0.0\\azure.provisioning.search.1.0.0.nupkg.sha512",
     "C:\\Users\\sdellalibera\\.nuget\\packages\\azure.resourcemanager\\1.13.0\\azure.resourcemanager.1.13.0.nupkg.sha512",
     "C:\\Users\\sdellalibera\\.nuget\\packages\\azure.resourcemanager.authorization\\1.1.4\\azure.resourcemanager.authorization.1.1.4.nupkg.sha512",
     "C:\\Users\\sdellalibera\\.nuget\\packages\\azure.resourcemanager.keyvault\\1.3.2\\azure.resourcemanager.keyvault.1.3.2.nupkg.sha512",

@@ -38,6 +38,38 @@
           "buildTransitive/net8.0/Aspire.Azure.AI.OpenAI.targets": {}
         }
       },
+      "Aspire.Azure.Search.Documents/9.3.1": {
+        "type": "package",
+        "dependencies": {
+          "Azure.Core": "1.46.0",
+          "Azure.Identity": "1.13.2",
+          "Azure.Search.Documents": "11.6.0",
+          "Microsoft.Extensions.Azure": "1.11.0",
+          "Microsoft.Extensions.Configuration.Abstractions": "8.0.0",
+          "Microsoft.Extensions.Configuration.Binder": "8.0.2",
+          "Microsoft.Extensions.DependencyInjection.Abstractions": "8.0.2",
+          "Microsoft.Extensions.Diagnostics.HealthChecks": "8.0.15",
+          "Microsoft.Extensions.Hosting.Abstractions": "8.0.1",
+          "Microsoft.Extensions.Logging.Abstractions": "8.0.3",
+          "Microsoft.Extensions.Options": "8.0.2",
+          "Microsoft.Extensions.Primitives": "8.0.0",
+          "OpenTelemetry.Extensions.Hosting": "1.9.0",
+          "System.Text.Json": "8.0.5"
+        },
+        "compile": {
+          "lib/net8.0/Aspire.Azure.Search.Documents.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/net8.0/Aspire.Azure.Search.Documents.dll": {
+            "related": ".xml"
+          }
+        },
+        "build": {
+          "buildTransitive/net8.0/Aspire.Azure.Search.Documents.targets": {}
+        }
+      },
       "Aspire.Azure.Security.KeyVault/9.3.1": {
         "type": "package",
         "dependencies": {
@@ -190,6 +222,24 @@
         },
         "runtime": {
           "lib/net8.0/Azure.Identity.dll": {
+            "related": ".xml"
+          }
+        }
+      },
+      "Azure.Search.Documents/11.6.0": {
+        "type": "package",
+        "dependencies": {
+          "Azure.Core": "1.41.0",
+          "System.Text.Json": "4.7.2",
+          "System.Threading.Channels": "4.7.1"
+        },
+        "compile": {
+          "lib/netstandard2.0/Azure.Search.Documents.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/netstandard2.0/Azure.Search.Documents.dll": {
             "related": ".xml"
           }
         }
@@ -1485,6 +1535,24 @@
         "lib/net8.0/Aspire.Azure.AI.OpenAI.xml"
       ]
     },
+    "Aspire.Azure.Search.Documents/9.3.1": {
+      "sha512": "9FN+K/jfSJls0HmBw5/TmPKUzaZ1DwNAZwn72uSWWlv3EWJmi32OS0d6Q5kALjCVP1e14iW7/u7/noDZ8Kp8dA==",
+      "type": "package",
+      "path": "aspire.azure.search.documents/9.3.1",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "ConfigurationSchema.json",
+        "Icon.png",
+        "README.md",
+        "THIRD-PARTY-NOTICES.TXT",
+        "aspire.azure.search.documents.9.3.1.nupkg.sha512",
+        "aspire.azure.search.documents.nuspec",
+        "buildTransitive/net8.0/Aspire.Azure.Search.Documents.targets",
+        "lib/net8.0/Aspire.Azure.Search.Documents.dll",
+        "lib/net8.0/Aspire.Azure.Search.Documents.xml"
+      ]
+    },
     "Aspire.Azure.Security.KeyVault/9.3.1": {
       "sha512": "pXAPQ+LmI5oqV63jhufMZnTEV1y3JL2wT9e/o03nffm3iTOCWHyMDEWyMni0JpQrHO5xrfuI1FRDu95o104Hiw==",
       "type": "package",
@@ -1614,6 +1682,22 @@
         "lib/net8.0/Azure.Identity.xml",
         "lib/netstandard2.0/Azure.Identity.dll",
         "lib/netstandard2.0/Azure.Identity.xml"
+      ]
+    },
+    "Azure.Search.Documents/11.6.0": {
+      "sha512": "M7WLx3ANLPHymfqb4Nwk4EwcWWRiHqdvnxJ7RH857baAbkEZ3FYVCRJmHgxH+ROpYOTVSx30uJzsa573/cdD8A==",
+      "type": "package",
+      "path": "azure.search.documents/11.6.0",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "CHANGELOG.md",
+        "README.md",
+        "azure.search.documents.11.6.0.nupkg.sha512",
+        "azure.search.documents.nuspec",
+        "azureicon.png",
+        "lib/netstandard2.0/Azure.Search.Documents.dll",
+        "lib/netstandard2.0/Azure.Search.Documents.xml"
       ]
     },
     "Azure.Security.KeyVault.Certificates/4.7.0": {
@@ -3481,6 +3565,7 @@
   "projectFileDependencyGroups": {
     "net9.0": [
       "Aspire.Azure.AI.OpenAI >= 9.3.1-preview.1.25305.6",
+      "Aspire.Azure.Search.Documents >= 9.3.1",
       "Aspire.Azure.Security.KeyVault >= 9.3.1",
       "Azure.Core >= 1.46.2",
       "Azure.Identity >= 1.14.0",
@@ -3548,6 +3633,10 @@
             "target": "Package",
             "version": "[9.3.1-preview.1.25305.6, )"
           },
+          "Aspire.Azure.Search.Documents": {
+            "target": "Package",
+            "version": "[9.3.1, )"
+          },
           "Aspire.Azure.Security.KeyVault": {
             "target": "Package",
             "version": "[9.3.1, )"
@@ -3592,7 +3681,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.301/PortableRuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.302/PortableRuntimeIdentifierGraph.json"
       }
     }
   }

@@ -58,6 +58,10 @@
               "target": "Package",
               "version": "[9.3.1-preview.1.25305.6, )"
             },
+            "Aspire.Azure.Search.Documents": {
+              "target": "Package",
+              "version": "[9.3.1, )"
+            },
             "Aspire.Azure.Security.KeyVault": {
               "target": "Package",
               "version": "[9.3.1, )"
@@ -102,7 +106,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.301/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.302/PortableRuntimeIdentifierGraph.json"
         }
       }
     },
@@ -200,7 +204,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.301/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.302/PortableRuntimeIdentifierGraph.json"
         }
       }
     }
